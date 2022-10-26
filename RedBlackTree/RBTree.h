@@ -4,27 +4,27 @@
 #include <queue>
 using namespace std;
 
-enum Color { RED, BLACK }; // цвет
+enum Color { RED, BLACK }; 
 
 /*********************************************************/
-struct Node // Узел дерева
+struct Node 
 {
-    string data; // данные узла 
-    Color color; // цвет (черный/красный)
-    Node* left, * right, * parent; // левый и правый дети, родитель
+    string data; 
+    Color color; 
+    Node* left, * right, * parent; 
 
-    Node(string data) { // консруктор узла
-        this->data = data; // записываем инф-ию в узел
-        color = RED; // (каждый новый добавляемый узел в дерево - всегда КРАСНЫЙ)
+    Node(string data) { 
+        this->data = data; 
+        color = RED; 
         left = right = parent = nullptr;
     }
 };
 /*********************************************************/
 
-class RBTree // класс дерева
+class RBTree 
 {
 private:
-    Node* root; // корень 
+    Node* root;
     string sum;
 protected:
     void rotateLeft(Node*&);
