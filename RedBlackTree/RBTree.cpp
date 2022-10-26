@@ -1,24 +1,24 @@
 #include "RBTree.h"
 
-RBTree::RBTree() { // конструктор класса
+RBTree::RBTree() {
     root = nullptr;
 }
 
-int RBTree::getColor(Node*& node) { // получаем цвет узла (геттер)
-    if (node == nullptr) // листья (null - узлы) окрашены в черный цвет
+int RBTree::getColor(Node*& node) {
+    if (node == nullptr) 
         return BLACK;
 
     return node->color;
 }
 
-void RBTree::setColor(Node*& node, Color color) { // сеттер для цвета
+void RBTree::setColor(Node*& node, Color color) {
     if (node == nullptr)
         return;
 
     node->color = color;
 }
 
-Node* RBTree::insert(Node*& root, Node*& ptr) { // вставка элемента
+Node* RBTree::insert(Node*& root, Node*& ptr) { 
     if (root == nullptr)
         return ptr;
 
@@ -34,17 +34,17 @@ Node* RBTree::insert(Node*& root, Node*& ptr) { // вставка элемента
     return root;
 }
 
-void RBTree::insertValue(string n) { // вставка нового значения в дерево
+void RBTree::insertValue(string n) { 
     Node* node = new Node(n);
     root = insert(root, node);
     balanceInsert(node);
 }
 
-void RBTree::rotateLeft(Node*& ptr) { // левый поворот 
+void RBTree::rotateLeft(Node*& ptr) { 
     Node* right_child = ptr->right;
     ptr->right = right_child->left;
 
-    if (ptr->right != nullptr) // если правй ребенок не равен пустому указателю
+    if (ptr->right != nullptr) 
         ptr->right->parent = ptr;
 
     right_child->parent = ptr->parent;
@@ -60,7 +60,7 @@ void RBTree::rotateLeft(Node*& ptr) { // левый поворот
     ptr->parent = right_child;
 }
 
-void RBTree::rotateRight(Node*& ptr) { // правый поворот
+void RBTree::rotateRight(Node*& ptr) { 
     Node* left_child = ptr->left;
     ptr->left = left_child->right;
 
@@ -81,34 +81,32 @@ void RBTree::rotateRight(Node*& ptr) { // правый поворот
 }
 
 void RBTree::balanceInsert(Node*& ptr) {
-    Node* parent = nullptr; // родитель (отец) 
-    Node* grandparent = nullptr; // дед
-    while (ptr != root && getColor(ptr) == RED && getColor(ptr->parent) == RED) { // нарушение вида: отец - красный
-        parent = ptr->parent; // получаем указатель на отца
-        grandparent = parent->parent; // получаем указатель на деда 
-        if (parent == grandparent->left) { // если отец слева от деда 
-            Node* uncle = grandparent->right; // то дядя справа от деда
-            if (getColor(uncle) == RED) { // если дядя тоже красный 
-                // инвертируем отца, дядю и деда 
+    Node* parent = nullptr; 
+    Node* grandparent = nullptr;
+    while (ptr != root && getColor(ptr) == RED && getColor(ptr->parent) == RED) { 
+        parent = ptr->parent; 
+        grandparent = parent->parent; 
+        if (parent == grandparent->left) { 
+            Node* uncle = grandparent->right; 
+            if (getColor(uncle) == RED) { 
                 setColor(uncle, BLACK);
                 setColor(parent, BLACK);
                 setColor(grandparent, RED);
                 ptr = grandparent;
             }
-            else { // если дядя черный 
-                if (ptr == parent->right) { // если текущий узел справа от отца
-                    rotateLeft(parent); // левый поворот 
+            else { 
+                if (ptr == parent->right) { 
+                    rotateLeft(parent); 
                     ptr = parent;
                     parent = ptr->parent;
                 }
                 rotateRight(grandparent);
-                swap(parent->color, grandparent->color); // инвертируем отца и деда 
+                swap(parent->color, grandparent->color); 
                 ptr = parent;
             }
         }
-        else { // если отец справа от деда, то дядя слева от деда
-            Node* uncle = grandparent->left;
-            // всех инверируем 
+        else { 
+            Node* uncle = grandparent->left; 
             if (getColor(uncle) == RED) {
                 setColor(uncle, BLACK);
                 setColor(parent, BLACK);
@@ -116,29 +114,29 @@ void RBTree::balanceInsert(Node*& ptr) {
                 ptr = grandparent;
             }
             else {
-                if (ptr == parent->left) { // если узел слева от родителя 
-                    rotateRight(parent); // правый поворот 
+                if (ptr == parent->left) { 
+                    rotateRight(parent);
                     ptr = parent;
                     parent = ptr->parent;
                 }
                 rotateLeft(grandparent);
-                swap(parent->color, grandparent->color); // инвертируем отца и деда
+                swap(parent->color, grandparent->color); 
                 ptr = parent;
             }
         }
     }
-    setColor(root, BLACK); // корень черный 
+    setColor(root, BLACK); // ГЄГ®Г°ГҐГ­Гј Г·ГҐГ°Г­Г»Г© 
 }
 
 /*********************************************************************/
-void RBTree::inorder(Node*& ptr) { // симметричный обход дерева
-    if (ptr == nullptr) // если дерево пустое
+void RBTree::inorder(Node*& ptr) { 
+    if (ptr == nullptr) 
         return;
 
-    inorder(ptr->left); // левый потомок
+    inorder(ptr->left); 
     cout << ptr->data << " ";
     (ptr->color == BLACK) ? cout << " black\n" : cout << " red\n";
-    inorder(ptr->right); // правй потомок 
+    inorder(ptr->right); 
 }
 
 void RBTree::inorder() {
@@ -147,13 +145,13 @@ void RBTree::inorder() {
 /*********************************************************************/
 
 
-/************************** сумма значений листьев ******************************/
+/*******************************************************/
 void RBTree::summa(Node*& ptr) {
-    if (ptr == nullptr) // если дерево пустое
+    if (ptr == nullptr)
         return;
     if (ptr->left == nullptr && ptr->right == nullptr) sum += ptr->data + " ";
-    summa(ptr->left); // левый потомок
-    summa(ptr->right); // правй потомок 
+    summa(ptr->left); 
+    summa(ptr->right); 
 }
 
 string RBTree::summa() {
@@ -164,7 +162,7 @@ string RBTree::summa() {
 /******************************************************************************/
 
 
-/***************************ВЫСОТА ДЕРЕВА*******************************/
+/****************************************************************************/
 int RBTree::heigh() {
     return heigh(this->root);
 }
@@ -173,10 +171,10 @@ int RBTree::heigh(Node*& ptr)
     if (ptr == nullptr) {
         return 0;
     }
-    else if (ptr->left == nullptr && ptr->right == nullptr) { // возвращаем 0 если нет дочерних эелементов
+    else if (ptr->left == nullptr && ptr->right == nullptr) { 
         return 0;
     }
-    else if (heigh(ptr->left) > heigh(ptr->right)) // выбираем макс длину
+    else if (heigh(ptr->left) > heigh(ptr->right)) 
         return heigh(ptr->left) + 1;
     else
         return heigh(ptr->right) + 1;
@@ -184,39 +182,37 @@ int RBTree::heigh(Node*& ptr)
 /*********************************************************************/
 
 
-// обход в ширину 
 void RBTree::breadthFirst() {
-    if (root == nullptr) // если дерево пустое
+    if (root == nullptr) 
         return;
 
     queue <Node*> q;
-    //Для начала поместим в очередь корень
     q.push(this->root);
 
     while (q.size() != 0) {
         Node* tmp;
         tmp = q.front();
-        q.pop(); // удаляем первый элемент очереди
+        q.pop(); 
         cout << tmp->data;
-        (tmp->color == BLACK) ? cout << " black\n" : cout << " red\n"; // выводим информацию о первом элементе очереди
-        //Если есть левый наследник, то помещаем его в очередь для дальнейшей обработки
+        (tmp->color == BLACK) ? cout << " black\n" : cout << " red\n"; 
+        
         if (tmp->left) {
             q.push(tmp->left);
         }
-        //Если есть правый наследник, то помещаем его в очередь для дальнейшей обработки
+        
         if (tmp->right) {
             q.push(tmp->right);
         }
     }
 }
 
-void RBTree::print() { // вывод 
-    if (root == nullptr) // проверяяем корень
+void RBTree::print() { 
+    if (root == nullptr) 
         cout << "empty RBtree\n";
     else
         print(root);
 }
-void RBTree::print(Node* node) { // вывод
+void RBTree::print(Node* node) {
     if (node == nullptr)
         return;
     if (node->parent == nullptr)
