@@ -125,7 +125,7 @@ void RBTree::balanceInsert(Node*& ptr) {
             }
         }
     }
-    setColor(root, BLACK); // êîðåíü ÷åðíûé 
+    setColor(root, BLACK); 
 }
 
 /*********************************************************************/
